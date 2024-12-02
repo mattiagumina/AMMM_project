@@ -1,0 +1,4 @@
+# Config file
+solver = GRASP;
+inputDataFile = project.8.dat;
+verbose = true;
