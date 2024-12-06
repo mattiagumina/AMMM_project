@@ -1,4 +1,4 @@
 # Config file
-solver = GRASP;
-inputDataFile = project.8.dat;
+solver = Greedy;
+inputDataFile = instance50_0.dat;
 verbose = true;

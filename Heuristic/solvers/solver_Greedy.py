@@ -48,7 +48,7 @@ class Solver_Greedy:
         if len(committee) < 2:
             return 0  # No pairs to calculate compatibility
         total_compatibility = sum(
-            self.compatibility_matrix[i][j] for i in committee for j in committee if i != j
+            self.compatibility_matrix[i][j] for i in committee for j in committee if i < j
         )
         num_pairs = len(committee) * (len(committee) - 1) / 2
         return total_compatibility / num_pairs
@@ -86,6 +86,6 @@ class Solver_Greedy:
 
         # Calculate the objective value
         objective = self._calculate_avg_compatibility(self.committee)
-        print(f"Objective: {objective:.2f}")
+        print(f"Objective: {objective:.13f}")
 
         return self.committee, objective

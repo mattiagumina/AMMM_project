@@ -1,24 +1,6 @@
-'''
-AMMM P2 Instance Generator v2.0
-Instance Generator class.
-Copyright 2020 Luis Velasco.
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
-
 import os, random
 import numpy as np
+import math
 from AMMMGlobals import AMMMException
 
 
@@ -43,22 +25,31 @@ class InstanceGenerator(object):
             instancePath = os.path.join(instancesDirectory, '%s%d_%d.%s' % (fileNamePrefix, N, i, fileNameExtension))
             fInstance = open(instancePath, 'w')
 
-            D = random.randint(2, max(2, N // 2))
-            
-            C = random.randint(D, N - 1)
-            
-            partitions = [0] + sorted(random.sample(range(1, C), D - 1)) + [C]
-            n = [partitions[i+1] - partitions[i] for i in range(D)]
-            
-            # Create department assignments
+            D = random.randint(min(math.ceil(math.sqrt(N)), N // 4), max(math.ceil(math.sqrt(N)), N // 4))
+
             d = []
             for p in range(D):
-                d.extend([p + 1] * (n[p]))  # Assign initial members equally to departments
-            d += [random.randint(1, D) for _ in range(N - C)]  # Distribute remaining members randomly
+                d.extend([p + 1] * (N // D))
+            d += [random.randint(1, D) for _ in range(N % D)]
+
+            n = [] 
+            for p in range(D):
+                M = 0
+                for j in range(N):
+                    if d[j] == p + 1:
+                        M += 1
+                n += [random.randint(1, M - 1)]
             
-            m = np.random.uniform(0.0, 1.0, (N, N)).round(2)
-            m = (m + m.T) / 2
-            np.fill_diagonal(m, 1.0)
+            m = [[0.00] * N for _ in range(N)]
+            for j in range(N):
+                for k in range(j, N):
+                    if j == k:
+                        m[j][k] = 1.00
+                    else:
+                        c = np.random.normal(0.50, 0.15)
+                        c = np.clip(c, 0.00, 1.00)
+                        m[j][k] = c
+                        m[k][j] = c
 
             fInstance.write(f"D = {D};\n")
             fInstance.write(f"n = [ {' '.join(map(str, n))} ];\n\n")

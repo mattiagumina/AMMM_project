@@ -2,6 +2,6 @@
 instancesDirectory = output;
 fileNamePrefix = instance;
 fileNameExtension = dat;
-numInstances = 10;
+numInstances = 1;
 
-N = 50;
+N = 60;
