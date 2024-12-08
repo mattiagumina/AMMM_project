@@ -19,6 +19,10 @@ range departments = 1..D;
 dvar boolean x[i in members];
 
 int nMembersInCommission = sum(p in departments) n[p];
+
+execute {
+    cplex.tilim = 1800;
+}
 //<<<<<<<<<<<<<<<<
 
 // Write here the objective function.

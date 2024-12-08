@@ -56,7 +56,7 @@ class Solver_GRASP:
         if len(committee) < 2:
             return 0  # No pairs to calculate compatibility
         total_compatibility = sum(
-            self.compatibility_matrix[i][j] for i in committee for j in committee if i != j
+            self.compatibility_matrix[i][j] for i in committee for j in committee if i < j
         )
         num_pairs = len(committee) * (len(committee) - 1) / 2
         return total_compatibility / num_pairs
@@ -88,7 +88,7 @@ class Solver_GRASP:
             # Build Restricted Candidate List (RCL)
             min_score = min(scores)
             max_score = max(scores)
-            threshold = min_score + self.alpha * (max_score - min_score)
+            threshold = max_score - self.alpha * (max_score - min_score)
             rcl = [candidates[i] for i in range(len(candidates)) if scores[i] >= threshold]
 
             # Select a random candidate from RCL
@@ -147,5 +147,5 @@ class Solver_GRASP:
             except ValueError:
                 continue  # Skip invalid constructions
 
-        print(f"Best Objective: {self.best_objective:.2f}")
+        print(f"Best Objective: {self.best_objective:.15f}")
         return self.best_committee, self.best_objective

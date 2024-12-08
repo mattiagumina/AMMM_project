@@ -23,7 +23,7 @@ class Main:
                 print('Input Data:', input_data)
             
             if self.config.solver == 'GRASP':
-                solver = Solver_GRASP(input_data, max_iterations=100, alpha=0.2)
+                solver = Solver_GRASP(input_data, max_iterations=10000, alpha=0.1)
             elif self.config.solver == 'GreedyLocalSearch':
                 solver = Solver_GreedyLocalSearch(input_data)
             elif self.config.solver == 'Greedy':
