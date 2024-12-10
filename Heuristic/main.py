@@ -20,7 +20,7 @@ class Main:
             input_data = DATParser.parse(self.config.inputDataFile)
 
             if self.config.verbose:
-                print('Input Data:', input_data)
+                print('Input Data:', self.config.inputDataFile)
             
             if self.config.solver == 'GRASP':
                 solver = Solver_GRASP(input_data, max_iterations=10000, alpha=0.1)

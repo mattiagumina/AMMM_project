@@ -17,6 +17,7 @@ range members = 1..N;
 range departments = 1..D;
 
 dvar boolean x[i in members];
+dvar boolean y[i in members][j in members];
 
 int nMembersInCommission = sum(p in departments) n[p];
 
@@ -28,7 +29,7 @@ execute {
 // Write here the objective function.
 
 //>>>>>>>>>>>>>>>>
-maximize (sum(i in members) x[i] * sum(j in i+1..N) x[j] * m[i][j]) / (nMembersInCommission * (nMembersInCommission - 1) / 2);
+maximize (sum(i in members) sum(j in i+1..N) y[i][j] * m[i][j]) / (nMembersInCommission * (nMembersInCommission - 1) / 2);
 //<<<<<<<<<<<<<<<<
 
 
@@ -52,6 +53,19 @@ subject to {
 	forall(i in members)
 	  	forall(j in i+1..N: m[i][j] > 0.00 && m[i][j] < 0.15)
 	    	sum(k in members: m[i][k] > 0.85 && m[j][k] > 0.85) x[k] >= x[i] + x[j] - 1;
+	    	
+	// Constraint 4
+	forall(i in members)
+	  forall(j in members){
+	    y[i][j] <= x[i];
+	    y[i][j] <= x[i];
+	    y[i][j] >= x[i] + x[j] - 1;    
+   }
+   
+    // Constraint 5
+    forall(i in members)
+      forall(j in members)
+        y[i][j] == y[j][i];
     //<<<<<<<<<<<<<<<<
 }
 
